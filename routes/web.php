@@ -13,12 +13,15 @@ Route::get('/post/firstpost', function () {
     return view('firstpost');
 });
 
-Route::get('/test', function () {
+Route::get('/testing', function () {
     return view('about');
 });
 
-Route::redirect('/about', '/test');
+Route::redirect('/about', '/testing');
 
 Route::fallback(function(){
     return "<h1>Page not found</h1>";
+});
+Route::get('/test', function () {
+    return view('test');
 });
