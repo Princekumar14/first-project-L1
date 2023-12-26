@@ -20,11 +20,22 @@ return new class extends Migration
             // $table->string('city',30)->default('No City');
             // $table->integer('age')->unsigned();
             
+//----------------------- Seeders ---------------------------------
+            // $table->id();
+            // $table->string('name',30);
+            // $table->string('email',40)->unique()->nullable();
+            // $table->timestamps();
+
+//----------------------- Factory ---------------------------------
             $table->id();
             $table->string('name',30);
+            $table->integer('age')->unsigned();
             $table->string('email',40)->unique()->nullable();
+            $table->string('address');
+            $table->string('city');
+            $table->string('phone');
+            $table->string('password');
             $table->timestamps();
-
         });
     }
 

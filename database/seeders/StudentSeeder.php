@@ -14,22 +14,31 @@ class StudentSeeder extends Seeder
      */
     public function run(): void
     {
+ $action =env('INSERT_DATA_ACTION');
+ function realData(){
+    $json = File::get(path:'database/json/students.json');
 
-        $json = File::get(path:'database/json/students.json');
+    $students = collect(json_decode($json));
 
-        $students = collect(json_decode($json));
+    $students->each(function($student){
+        student::create([
+            'name' => $student->name,
+            'age' => $student->age,
+            'email' => $student->email,
+            'address' => $student->address,
+            'city' => $student->city,
+            'phone' => $student->phone,
+            'password' => $student->password
+        ]);
+    });
+ }
+        if( $action== "using_seeder" || $action== "using_both"){
+            realData();
+        }
+        if($action== "using_factory" || $action== "using_both"){
+            student::factory()->count(10)->create();
+        }
+       
 
-        $students->each(function($student){
-            student::create([
-                'name' => $student->name,
-                'email' => $student->email
-            ]);
-        });
-
-
-        // student::create([
-        //     'name' => 'prince',
-        //     'email' => 'prince@gmial.com'
-        // ]);
     }
 }

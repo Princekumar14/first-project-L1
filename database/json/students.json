@@ -1,14 +1,29 @@
 [
     {
         "name" :"prince",
-        "email" :"prince@gmial.com"
+        "age" : 18,
+        "email" :"prince@gmial.com",
+        "address" :"address1",
+        "city" :"city1",
+        "phone" :"6284376507",
+        "password" : "password1"
     },
     {
         "name" :"prince2",
-        "email" :"prince2@gmial.com"
+        "age" : 19,
+        "email" :"prince2@gmial.com",
+        "address" :"address2",
+        "city" :"city2",
+        "phone" :"6284376508",
+        "password" : "password2"
     },
     {
         "name" :"prince3",
-        "email" :"prince3@gmial.com"
+        "age" : 20,
+        "email" :"prince3@gmial.com",
+        "address" :"address3",
+        "city" :"city3",
+        "phone" :"6284376509",
+        "password" : "password3"
     }
 ]
