@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -25,3 +26,7 @@ Route::fallback(function(){
 Route::get('/test', function () {
     return view('test');
 });
+
+Route::get('/students', [StudentController::class, 'showStudents']);
+
+Route::get('/student/{id}', [StudentController::class, 'singleStudent'])->name('view.user');
