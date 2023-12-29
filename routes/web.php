@@ -27,6 +27,23 @@ Route::get('/test', function () {
     return view('test');
 });
 
-Route::get('/students', [StudentController::class, 'showStudents']);
 
-Route::get('/student/{id}', [StudentController::class, 'singleStudent'])->name('view.user');
+Route::get('/students', [StudentController::class, 'showStudents'])->name('allstudents');
+Route::controller(StudentController::class)->group(function(){
+
+    Route::get('/student/{id}', 'singleStudent')->name('view.student');
+    
+    Route::post('/add', 'addStudent')->name('addStudent');
+
+    // Route::post('/update/{id}', 'updateStudent')->name('update.student');
+    Route::put('/update/{id}', 'updateStudent')->name('update.student');
+
+    Route::get('/updatepage/{id}', 'updatePage')->name('update.page');
+    
+    Route::get('/delete/{id}', 'deleteStudent')->name('delete.student');
+
+});
+
+
+
+Route::view('addnewstudent', '/addstudent')->name('addnewstudent');
