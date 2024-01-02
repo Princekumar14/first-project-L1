@@ -42,6 +42,14 @@ Route::controller(StudentController::class)->group(function(){
     
     Route::get('/delete/{id}', 'deleteStudent')->name('delete.student');
 
+    Route::get('/songsInfo', 'showSongsInfo')->name('songsDetail');
+
+    Route::get('/union', 'uniondata')->name('unionData');
+
+    Route::get('/when', 'whendata')->name('whenData');
+
+    Route::get('/chunk', 'chunkdata')->name('chunkData');
+
 });
 
 
