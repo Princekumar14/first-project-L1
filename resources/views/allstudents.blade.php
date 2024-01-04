@@ -8,6 +8,43 @@
     <title>All Students</title>
 </head>
 <body>
+   
+    <?php
+    use App\Models\Artist;
+    use App\Models\Album;
+    use App\Models\Song;
+    use App\Models\Category;
+    use App\Models\Comment;
+    // dd(Artist::with('albums')->where('id',6)->get());
+    // $songs = Artist::find(6);
+    // echo gettype($songs);
+    echo "<pre>";
+        // echo Album::with('FirstSongs')->where('id',1)->get();
+    // print_r($songs); 
+    echo "</pre>";
+    // foreach ($songs as $song) {
+    //     echo $song->name . "<br>";
+    // }
+
+    // echo Album::with('artist')->where('id',3)->get();
+    // echo Category::with('albums')->where('id',3)->get();
+    $comment = Comment::find(1);
+ 
+    $commentable = $comment->commentable;
+    echo $commentable;
+
+    $song = Song::find(2);
+    // echo $song->comments . "hi";
+    echo "<pre>";
+        // echo Album::with('FirstSongs')->where('id',1)->get();
+    // print_r($song->comments); 
+    echo "</pre>";
+    foreach ($song->comments as $comment) {
+        echo $comment->body . "<br>";
+    }
+
+    die;
+    ?>
     <div class="container">
         <div class="row">
             <div class="col-8">
