@@ -79,7 +79,7 @@ class StudentRequest extends FormRequest
     {
         $this->merge([
             // 'sname' => strtoupper($this->sname),
-             'sname' => Str::slug($this->sname),
+            //  'sname' => Str::slug($this->sname),
         ]);
     }
 

@@ -18,7 +18,7 @@ class StudentController extends Controller
         // $students = DB::table('students')->orderBy('id', "desc")->simplePaginate(4);
         // $students = DB::table('students')->orderBy('id', "asc")->paginate(4,['*'], 'p', 2);  
         // $students = DB::table('students')->paginate(4)->appends(['sort' => 'vote', 'test' => 'abc'])->fragment('students');  
-        $students = DB::table('students')->orderBy('id')->cursorPaginate(4);  
+        $students = DB::table('students')->orderBy('id', 'desc')->cursorPaginate(4);  
 
         $data['data'] = $students;
         return view('allstudents', $data);
@@ -71,7 +71,7 @@ class StudentController extends Controller
         // return $req->only(['sname', 'scity']);
         // return $req->except(['sname', 'scity']);
 
-        return $req->all();
+        // return $req->all();
         $student = DB::table('students')
                 ->insert(
                     [

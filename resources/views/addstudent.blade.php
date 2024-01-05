@@ -24,42 +24,19 @@
                     </ul> 
                   @endif --}}
 
-                  <div class="mb-3">
-                    <label for="" class="form-label">Name</label>
-                      <input type="text" value="{{ old('sname') }}" class="form-control @error('sname') is-invalid @enderror" name="sname">
-                      <span class="text-danger"> @error('sname') {{ $message }} @enderror </span>
-                  </div>
-                  <div class="mb-3">
-                    <label for="" class="form-label">Age</label>
-                      <input type="text" value="{{ old('sage') }}" class="form-control @error('sage') is-invalid @enderror" name="sage">
-                      <span class="text-danger"> @error('sage') {{ $message }} @enderror </span>
-                  </div>
-                  <div class="mb-3">
-                    <label for="" class="form-label">Email</label>
-                      <input type="email" value="{{ old('semail') }}" class="form-control @error('semail') is-invalid @enderror" name="semail">
-                      <span class="text-danger"> @error('semail') {{ $message }} @enderror </span>
-                  </div>
-                  <div class="mb-3">
-                    <label for="" class="form-label">Address</label>
-                      <input type="text" value="{{ old('saddress') }}" class="form-control @error('saddress') is-invalid @enderror" name="saddress">
-                      <span class="text-danger"> @error('saddress') {{ $message }} @enderror </span>
-                  </div>
-                  <div class="mb-3">
-                    <label for="" class="form-label">City</label>
-                      <input type="text" value="{{ old('scity') }}" class="form-control @error('scity') is-invalid @enderror" name="scity">
-                      <span class="text-danger"> @error('scity') {{ $message }} @enderror </span>
-                  </div>
-                  <div class="mb-3">
-                    <label for="" class="form-label">Phone</label>
-                      {{-- <input type="tel" pattern="[0-9]{10}" required class="form-control" name="sphone"> --}}
-                      <input type="text" value="{{ old('sphone') }}" class="form-control @error('sphone') is-invalid @enderror" name="sphone">
-                      <span class="text-danger"> @error('sphone') {{ $message }} @enderror </span>
-                  </div>
-                  <div class="mb-3">
-                    <label for="" class="form-label">Password</label>
-                      <input type="text" value="{{ old('spassword') }}" class="form-control @error('spassword') is-invalid @enderror" name="spassword">
-                      <span class="text-danger"> @error('spassword') {{ $message }} @enderror </span>
-                  </div>
+                  {{-- @php
+                      $demo = 1;
+                  @endphp
+                  <x-form-inputs type="text" name="sname" label="Name" :demo='$demo'/> --}}
+                  
+                  <x-form-inputs type="text" name="sname" label="Name"/>
+                  <x-form-inputs type="text" name="sage" label="Age"/>
+                  <x-form-inputs type="email" name="semail" label="Email"/>
+                  <x-form-inputs type="text" name="saddress" label="Address"/>
+                  <x-form-inputs type="text" name="scity" label="City"/>
+                  <x-form-inputs type="text" name="sphone" label="Phone"/>
+                  <x-form-inputs type="text" name="spassword" label="Password"/>
+
                   <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
               </div>
