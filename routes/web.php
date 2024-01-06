@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\CookiesController;
 use App\Http\Controllers\StudentController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
@@ -55,3 +57,30 @@ Route::controller(StudentController::class)->group(function(){
 
 
 Route::view('addnewstudent', '/addstudent')->name('addnewstudent');
+
+Route::get('get-all-session', function(){
+    $session = session()->all();
+    echo "<pre>";
+    print_r($session); 
+    echo "</pre>";
+    // die;
+});
+
+Route::get('set-session', function (Request $request){
+    $request->session()->put('user_name', 'Prince User');
+    $request->session()->put('user_id', '123');
+    // $request->session()->flash('status', 'Success !!');  // inteliphense error for flash()
+    return redirect('get-all-session');
+});
+
+Route::get('destroy-session', function(){
+    session()->forget(['user_name','user_id']);
+    return redirect('get-all-session');
+});
+
+
+Route::controller(CookiesController::class)->group(function(){
+    Route::get('/set-cookie', 'setCookie');
+    Route::get('/get-cookie', 'getCookie');
+    Route::get('/del-cookie', 'delCookie');
+});

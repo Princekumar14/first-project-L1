@@ -1,4 +1,9 @@
-
+<?php
+    $session = session()->all();
+    echo "<pre>";
+    print_r($session); 
+    echo "</pre>";
+  ?> 
    
 @php
 use App\Models\Artist;
