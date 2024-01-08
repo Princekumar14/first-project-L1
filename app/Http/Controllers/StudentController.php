@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StudentRequest;
+use App\Models\Song;
+use App\Models\student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class StudentController extends Controller
 {
@@ -199,5 +203,26 @@ class StudentController extends Controller
 
         // return $albumsInfo;
         
+    }
+
+    public function cacheStudents(){
+        // $json = File::get(path:'../database/json/students.json');
+
+        // $students = collect(json_decode($json));
+        // return student::all();
+        // return Cache::get("name", $students);
+        // Cache::forget('name');
+        
+        return Cache::remember("students", 10, function(){
+            // $json = File::get(path:'../database/json/students.json');
+
+            // $students = collect(json_decode($json));
+            // return $students;
+            return Song::with('comments')->where('id', '=', '1')->get();
+        });
+
+        if(Cache::has("students")){
+            return Cache::get("students");
+        }
     }
 }

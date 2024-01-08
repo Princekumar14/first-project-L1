@@ -52,6 +52,8 @@ Route::controller(StudentController::class)->group(function(){
 
     Route::get('/chunk', 'chunkdata')->name('chunkData');
 
+    Route::get('/cache', 'cacheStudents');
+
 });
 
 
