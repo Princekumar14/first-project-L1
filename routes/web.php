@@ -54,6 +54,9 @@ Route::controller(StudentController::class)->group(function(){
 
     Route::get('/cache', 'cacheStudents');
 
+    // Route::get('/autocomplete', 'AutocompleteController@index');
+    Route::post('/students/fetch', 'fetch')->name('student.fetch');
+
 });
 
 

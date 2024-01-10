@@ -209,7 +209,7 @@ class StudentController extends Controller
         // $json = File::get(path:'../database/json/students.json');
 
         // $students = collect(json_decode($json));
-        // return student::all();
+        // // return student::all();
         // return Cache::get("name", $students);
         // Cache::forget('name');
         
@@ -224,5 +224,52 @@ class StudentController extends Controller
         if(Cache::has("students")){
             return Cache::get("students");
         }
+    }
+    function fetch(Request $request)
+    {
+     if($request->get('query'))
+     {
+      $query = $request->get('query');
+
+
+      if(Cache::has("studentsName")){
+          $data = Cache::get("studentsName");
+          for($i=0; $i < sizeof($data); $i++){
+              if(!str_contains($data[$i]->name, $query)){
+                // $data = Cache::get("studentsName");
+                break;
+
+            }else{
+                $data = DB::table('students')
+                ->select('name')
+                ->where('name', 'LIKE', "%{$query}%")
+                ->get();
+                Cache::put("studentsName", $data);
+
+            }
+        }
+
+
+      }else{
+          $data = DB::table('students')
+            ->select('name')
+            ->where('name', 'LIKE', "%{$query}%")
+            ->get();
+            Cache::put("studentsName", $data);
+            // return $cachedata;
+            
+            
+            
+        }
+      $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+      foreach($data as $row)
+      {
+       $output .= '
+       <li><a href="#">'.$row->name.'</a></li>
+       ';
+      }
+      $output .= '</ul>';
+      echo $output;
+     }
     }
 }
