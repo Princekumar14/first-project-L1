@@ -232,22 +232,36 @@ class StudentController extends Controller
       $query = $request->get('query');
 
 
-      if(Cache::has("studentsName")){
-          $data = Cache::get("studentsName");
-          for($i=0; $i < sizeof($data); $i++){
-              if(!str_contains($data[$i]->name, $query)){
-                // $data = Cache::get("studentsName");
+      if(Cache::has("studentsName"))
+      {
+        // Cache::forget('studentsName');die;
+          $cachedData = Cache::get("studentsName");
+          $data = null;
+          echo "contains: ".str_contains(strtolower($cachedData[3]->name), strtolower($query))."<br>";
+          for($i=0; $i < sizeof($cachedData); $i++){
+            $allnames = strtolower($cachedData[$i]->name);
+              if(str_contains($allnames, strtolower($query))){
+                  echo "this is firstly contains at index: ",$i;
+                $data = $cachedData;
                 break;
 
-            }else{
-                $data = DB::table('students')
-                ->select('name')
-                ->where('name', 'LIKE', "%{$query}%")
-                ->get();
-                Cache::put("studentsName", $data);
-
+                }else{
+                    $data = DB::table('students')
+                    ->select('name')
+                    ->where('name', 'LIKE', "%{$query}%")
+                    ->get();
+                    if(sizeof($data) > 0){
+                        Cache::put("studentsName", $data);
+                        $newCachedData = Cache::get("studentsName");
+                        echo "cache inside created bhai";
+                    }
+                    $data = $newCachedData;
+                    break;
+                }
+                // $data = $cachedData;
+                // break;
             }
-        }
+            // echo $data;
 
 
       }else{
@@ -255,8 +269,10 @@ class StudentController extends Controller
             ->select('name')
             ->where('name', 'LIKE', "%{$query}%")
             ->get();
-            Cache::put("studentsName", $data);
-            // return $cachedata;
+            if(sizeof($data) > 0){
+                Cache::put("studentsName", $data);
+                echo "cache created bhai";
+            }
             
             
             

@@ -60,7 +60,7 @@
     </div>
     <script>
         $(document).ready(function(){
-         $('#student_name').on('input',function(){ 
+         $('#student_name').on('keyup',function(){ 
                 var query = $(this).val();
                 if(query != '' && query.length > 2)
                 {
