@@ -4,51 +4,53 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StudentRequest;
 use App\Models\Song;
-use App\Models\student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 
 class StudentController extends Controller
 {
-    public function showStudents(){
+    public function showStudents()
+    {
         // $students = DB::table('students')
         // // ->select('name', 'age')
         // // ->where('id', 1)->orWhere('age',15)->orWhereBetween('age', [15, 19])
         // // ->orderBy('age','desc')
         // ->get();
-        
+
         // $students = DB::table('students')->orderBy('id', "desc")->simplePaginate(4);
-        // $students = DB::table('students')->orderBy('id', "asc")->paginate(4,['*'], 'p', 2);  
-        // $students = DB::table('students')->paginate(4)->appends(['sort' => 'vote', 'test' => 'abc'])->fragment('students');  
-        $students = DB::table('students')->orderBy('id', 'desc')->cursorPaginate(4);  
+        // $students = DB::table('students')->orderBy('id', "asc")->paginate(4,['*'], 'p', 2);
+        // $students = DB::table('students')->paginate(4)->appends(['sort' => 'vote', 'test' => 'abc'])->fragment('students');
+        $students = DB::table('students')->orderBy('id', 'desc')->cursorPaginate(4);
 
         $data['data'] = $students;
         return view('allstudents', $data);
     }
-    
-    public function showStudents1(){
-        $students = DB::select('select * from students where age < ? and name like ?', [20, 'p%']); 
 
-        // $students = DB::select('select * from students where id = :id', ['id' => 3]); 
+    public function showStudents1()
+    {
+        $students = DB::select('select * from students where age < ? and name like ?', [20, 'p%']);
 
-        // $students = DB::insert('insert into students (name, age, email, address, city, phone, password, created_at, updated_at) values (?,?,?,?,?,?,?,?,?)', ['prince new', 21, 'princenew@gmail.com', 'address line 2', 'Ludhiana', '6284376502', 'passwordnew', now(), now()]); 
+        // $students = DB::select('select * from students where id = :id', ['id' => 3]);
 
-        // $students = DB::update('UPDATE students SET email= "prince2@gmail.com2" WHERE id = ? ', [10]); 
+        // $students = DB::insert('insert into students (name, age, email, address, city, phone, password, created_at, updated_at) values (?,?,?,?,?,?,?,?,?)', ['prince new', 21, 'princenew@gmail.com', 'address line 2', 'Ludhiana', '6284376502', 'passwordnew', now(), now()]);
 
-        // $students = DB::delete('DELETE FROM students WHERE id = ? ', [10]); 
+        // $students = DB::update('UPDATE students SET email= "prince2@gmail.com2" WHERE id = ? ', [10]);
+
+        // $students = DB::delete('DELETE FROM students WHERE id = ? ', [10]);
 
         return $students;
     }
-    
-    public function singleStudent( string $id){
+
+    public function singleStudent(string $id)
+    {
         $student = DB::table('students')->where('id', $id)->get();
         return view('student', ['data' => $student]);
-        
+
     }
-    
-    public function addStudent(StudentRequest $req){
+
+    public function addStudent(StudentRequest $req)
+    {
         // $req->validate([
         //     'sname' => 'required',
         //     'sage' => 'required|numeric|min:18',
@@ -77,143 +79,148 @@ class StudentController extends Controller
 
         // return $req->all();
         $student = DB::table('students')
-                ->insert(
-                    [
-                        'name' => $req->sname,
-                        'age' => $req->sage,
-                        'email' => $req->semail,
-                        'address' => $req->saddress,
-                        'city' => $req->scity,
-                        'phone' => $req->sphone,
-                        'password' => $req->spassword
-                    ]
-                );
-        if($student){
+            ->insert(
+                [
+                    'name' => $req->sname,
+                    'age' => $req->sage,
+                    'email' => $req->semail,
+                    'address' => $req->saddress,
+                    'city' => $req->scity,
+                    'phone' => $req->sphone,
+                    'password' => $req->spassword,
+                ]
+            );
+        if ($student) {
             return redirect()->route('allstudents');
             // echo "<h1>Data Added Successfully.</h1>";
-            
-        }else{
+
+        } else {
             echo "<h1>Failed to Add Data.</h1>";
 
         }
-        
+
     }
-    
-    public function updatePage(string $id){   
+
+    public function updatePage(string $id)
+    {
         // $student = DB::table('students')->where('id', $id)->get();
         $student = DB::table('students')->find($id);
 
         return view('updatestudent', ['data' => $student]);
-        
+
     }
-    
-    public function updateStudent( Request $req, $id){
+
+    public function updateStudent(Request $req, $id)
+    {
         $student = DB::table('students')
-        ->where('id', $id)
-        ->update(
-            [
-                'name' => $req->sname,
-                'age' => $req->sage,
-                'email' => $req->semail,
-                'address' => $req->saddress,
-                'city' => $req->scity,
-                'phone' => $req->sphone,
-                'password' => $req->spassword
-            ]
-        );
-        if($student){
+            ->where('id', $id)
+            ->update(
+                [
+                    'name' => $req->sname,
+                    'age' => $req->sage,
+                    'email' => $req->semail,
+                    'address' => $req->saddress,
+                    'city' => $req->scity,
+                    'phone' => $req->sphone,
+                    'password' => $req->spassword,
+                ]
+            );
+        if ($student) {
             return redirect()->route('allstudents');
             // echo "<h1>Data Updated Successfully.</h1>";
-            
-        }else{
+
+        } else {
             echo "<h1>Failed to Update Data.</h1>";
 
         }
-        
+
     }
-    
-    public function deleteStudent( string $id){
+
+    public function deleteStudent(string $id)
+    {
         $student = DB::table('students')
-        ->where('id', $id)
-        ->delete();
-        if($student){
+            ->where('id', $id)
+            ->delete();
+        if ($student) {
             return redirect()->route('allstudents');
 
         }
-        
+
     }
-    
-    public function showSongsInfo(){
+
+    public function showSongsInfo()
+    {
         $songInfo = DB::table('artists')
-        ->select('artists.*', 'albums.name as album_name')
-        ->join('albums', 'artists.id', '=', 'albums.artist_id')
+            ->select('artists.*', 'albums.name as album_name')
+            ->join('albums', 'artists.id', '=', 'albums.artist_id')
         // ->where('artists.id', '>', '4')
-        ->where('albums.name', 'like', 's%')
-        ->orderBy('artists.id', 'desc')
-        ->get();
+            ->where('albums.name', 'like', 's%')
+            ->orderBy('artists.id', 'desc')
+            ->get();
 
         return $songInfo;
-        
+
     }
 
-    public function uniondata(){
+    public function uniondata()
+    {
         $artistInfo = DB::table('artists')
-        ->select('artists.name as artist_name');
-        
-        $albumInfo = DB::table('albums')
-        ->union($artistInfo)
-        ->select('albums.name')
-        ->get();
+            ->select('artists.name as artist_name');
 
+        $albumInfo = DB::table('albums')
+            ->union($artistInfo)
+            ->select('albums.name')
+            ->get();
 
         return $albumInfo;
-        
+
     }
 
-    public function whendata(){
-        $test = false; 
-
+    public function whendata()
+    {
+        $test = false;
 
         $songsInfo = DB::table('songs')
-        ->when($test, function($query){
-            $query->where('album_id', '>', '8');  // Executed when true
-            
-        }, function($query){
-            $query->where('album_id', '<', '3');  // Executed when false
+            ->when($test, function ($query) {
+                $query->where('album_id', '>', '8'); // Executed when true
 
-        })
-        ->get();
+            }, function ($query) {
+                $query->where('album_id', '<', '3'); // Executed when false
 
+            })
+            ->get();
 
         return $songsInfo;
-        
+
     }
 
-    public function chunkdata(){
+    public function chunkdata()
+    {
 
         $albumsInfo = DB::table('albums')
-        ->orderBy('id')
-        ->chunk(3, function($albums){
-            echo "<div style='border: 1px solid red; margin-bottom:15px;'>";
-            foreach($albums as  $album){
-                echo $album->name . "<br>";
-            }
-            echo "</div>";
-        });
+            ->orderBy('id')
+            ->chunk(3, function ($albums) {
+                echo "<div style='border: 1px solid red; margin-bottom:15px;'>";
+                foreach ($albums as $album) {
+                    echo $album->name . "<br>";
+                }
+                echo "</div>";
+            });
 
         // return $albumsInfo;
-        
+
     }
 
-    public function cacheStudents(){
+    public function cacheStudents()
+    {
         // $json = File::get(path:'../database/json/students.json');
 
         // $students = collect(json_decode($json));
         // // return student::all();
         // return Cache::get("name", $students);
         // Cache::forget('name');
-        
-        return Cache::remember("students", 10, function(){
+
+        return Cache::remember("students", 10, function () {
             // $json = File::get(path:'../database/json/students.json');
 
             // $students = collect(json_decode($json));
@@ -221,71 +228,83 @@ class StudentController extends Controller
             return Song::with('comments')->where('id', '=', '1')->get();
         });
 
-        if(Cache::has("students")){
+        if (Cache::has("students")) {
             return Cache::get("students");
         }
     }
-    function fetch(Request $request)
+    public function fetch(Request $request)
     {
-     if($request->get('query'))
-     {
-      $query = $request->get('query');
+        if ($request->get('query')) {
+            $query = $request->get('query');
 
+            if (Cache::has("studentsName")) {
+                echo "hi<br>";
+                // Cache::forget('studentsName');die;
+                $cachedData = Cache::get("studentsName");
 
-      if(Cache::has("studentsName"))
-      {
-        // Cache::forget('studentsName');die;
-          $cachedData = Cache::get("studentsName");
-          $data = null;
-          echo "contains: ".str_contains(strtolower($cachedData[3]->name), strtolower($query))."<br>";
-          for($i=0; $i < sizeof($cachedData); $i++){
-            $allnames = strtolower($cachedData[$i]->name);
-              if(str_contains($allnames, strtolower($query))){
-                  echo "this is firstly contains at index: ",$i;
-                $data = $cachedData;
-                break;
+                //   echo "classbased: ".$cachedData->contains('name')."<br>".$cachedData[0]->name;
+                //   echo "cache size: ". sizeof($cachedData)."<br>". $cachedData."<br>";die;
+                //   $data = null;
+                //   echo "contains: ".str_contains(strtolower($cachedData[3]->name), strtolower($query))."<br>";
+                for ($i = 0; $i < sizeof($cachedData); $i++) {
+                    $cachedData = Cache::get("studentsName");
+                    $allnames = $cachedData[$i]->name;
+                    if (str_contains(strtolower($allnames), strtolower($query))) {
+                        echo "this is firstly contains at index: ", $i;
+                        echo $data = $cachedData;
+                        break;
 
-                }else{
-                    $data = DB::table('students')
+                    } else {
+                        $data = DB::table('students')
+                            ->select('name')
+                            ->where('name', 'LIKE', "%{$query}%")
+                            ->get();
+                        echo sizeof($data);
+                        if (sizeof($data) > 0) {
+                            // $combineData = $data->merge($cachedData);
+                            // echo $data = $combineData;
+                            Cache::put("studentsName", $data);
+                            // echo "cache inside created bhai";
+                            break;
+                        }
+                    }
+                }
+
+            } else {
+                $data = DB::table('students')
                     ->select('name')
                     ->where('name', 'LIKE', "%{$query}%")
                     ->get();
-                    if(sizeof($data) > 0){
-                        Cache::put("studentsName", $data);
-                        $newCachedData = Cache::get("studentsName");
-                        echo "cache inside created bhai";
-                    }
-                    $data = $newCachedData;
-                    break;
+                // $dataArray = [];
+                // foreach ($data as $key => $value) {
+                //     array_push()
+
+                // }    
+                if (sizeof($data) > 0) {
+                    Cache::put("studentsName", $data);
+                    echo "cache created bhai";
                 }
-                // $data = $cachedData;
-                // break;
-            }
-            // echo $data;
 
-
-      }else{
-          $data = DB::table('students')
-            ->select('name')
-            ->where('name', 'LIKE', "%{$query}%")
-            ->get();
-            if(sizeof($data) > 0){
-                Cache::put("studentsName", $data);
-                echo "cache created bhai";
             }
-            
-            
-            
+            $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+            foreach ($data as $row) {
+                $output .= '
+                        <li><a href="#">' . $row->name . '</a></li>
+                        ';
+            }
+
+            //   for($i=0; $i < sizeof($data); $i++)
+            //   {
+            //         $allnames = $data[$i]->name;
+            //         if(str_contains(strtolower($allnames), strtolower($query))){
+            //             $output .= '
+            //             <li><a href="#">'.$data[$i]->name.'</a></li>
+            //             ';
+
+            //         }
+            //   }
+            $output .= '</ul>';
+            echo $output;
         }
-      $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
-      foreach($data as $row)
-      {
-       $output .= '
-       <li><a href="#">'.$row->name.'</a></li>
-       ';
-      }
-      $output .= '</ul>';
-      echo $output;
-     }
     }
 }
