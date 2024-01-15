@@ -236,75 +236,72 @@ class StudentController extends Controller
     {
         if ($request->get('query')) {
             $query = $request->get('query');
+            $exists = false;
 
             if (Cache::has("studentsName")) {
-                echo "hi<br>";
-                // Cache::forget('studentsName');die;
                 $cachedData = Cache::get("studentsName");
-
-                //   echo "classbased: ".$cachedData->contains('name')."<br>".$cachedData[0]->name;
-                //   echo "cache size: ". sizeof($cachedData)."<br>". $cachedData."<br>";die;
-                //   $data = null;
-                //   echo "contains: ".str_contains(strtolower($cachedData[3]->name), strtolower($query))."<br>";
-                for ($i = 0; $i < sizeof($cachedData); $i++) {
-                    $cachedData = Cache::get("studentsName");
-                    $allnames = $cachedData[$i]->name;
-                    if (str_contains(strtolower($allnames), strtolower($query))) {
-                        echo "this is firstly contains at index: ", $i;
-                        echo $data = $cachedData;
+                foreach ($cachedData as $data) {
+                    if (str_contains(strtolower($data->name), strtolower($query))) {
+                        $exists = true;
+                        // echo "values from cache";
+                        $data = $cachedData;
                         break;
+                    }
 
-                    } else {
-                        $data = DB::table('students')
-                            ->select('name')
-                            ->where('name', 'LIKE', "%{$query}%")
-                            ->get();
-                        echo sizeof($data);
-                        if (sizeof($data) > 0) {
-                            // $combineData = $data->merge($cachedData);
-                            // echo $data = $combineData;
-                            Cache::put("studentsName", $data);
-                            // echo "cache inside created bhai";
-                            break;
-                        }
+                }
+                if (!$exists) {
+                    echo "hi<br>";
+                    $data = DB::table('students')
+                    ->select('name')
+                    ->where('name', 'LIKE', "%{$query}%")
+                    ->get();
+
+                    if (sizeof($data) > 0) {
+                        $combineData = $data->merge($cachedData);
+                        // echo "new data added to cache";
+                        $data = $combineData;
+                        Cache::put("studentsName", $data, now()->addMinutes(5)); //new data added to cache
                     }
                 }
+
 
             } else {
                 $data = DB::table('students')
                     ->select('name')
                     ->where('name', 'LIKE', "%{$query}%")
                     ->get();
-                // $dataArray = [];
-                // foreach ($data as $key => $value) {
-                //     array_push()
-
-                // }    
+                    // ->toArray();
                 if (sizeof($data) > 0) {
-                    Cache::put("studentsName", $data);
-                    echo "cache created bhai";
+                    Cache::put("studentsName", $data, now()->addMinutes(5));
+                    echo "cache created";
                 }
 
             }
-            $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
-            foreach ($data as $row) {
-                $output .= '
-                        <li><a href="#">' . $row->name . '</a></li>
-                        ';
+
+            if(sizeof($data)>0){
+                $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+                foreach ($data as $row) {
+                    if (str_contains(strtolower($row->name), strtolower($query))) {
+                        $output .= '
+                                <li><a href="#">' . $row->name . '</a></li>
+                                ';
+
+                    }
+                }
+    
+                // for ($i = 0; $i < sizeof($data); $i++) {
+                //     $allnames = $data[$i]->name;
+                //     if (str_contains(strtolower($allnames), strtolower($query))) {
+                //         $output .= '
+                //             <li><a href="#">' . $data[$i]->name . '</a></li>
+                //             ';
+    
+                //     }
+                // }
+                $output .= '</ul>';
+                echo $output;
+
             }
-
-            //   for($i=0; $i < sizeof($data); $i++)
-            //   {
-            //         $allnames = $data[$i]->name;
-            //         if(str_contains(strtolower($allnames), strtolower($query))){
-            //             $output .= '
-            //             <li><a href="#">'.$data[$i]->name.'</a></li>
-            //             ';
-
-            //         }
-            //   }
-            $output .= '</ul>';
-            echo $output;
         }
     }
 }
