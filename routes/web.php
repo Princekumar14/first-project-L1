@@ -32,6 +32,9 @@ Route::middleware(['super-gaurd'])->group(function(){
     Route::redirect('/about', '/testing');
 });
 
+Route::get('/upload', function () {
+    return view('upload');
+});
 Route::get('/students', [StudentController::class, 'showStudents'])->name('allstudents')->middleware('gaurd');
 // Route::get('/students', [StudentController::class, 'showStudents'])->name('allstudents')->middleware('super-gaurd');
 Route::controller(StudentController::class)->group(function(){
@@ -59,6 +62,8 @@ Route::controller(StudentController::class)->group(function(){
 
     // Route::get('/autocomplete', 'AutocompleteController@index');
     Route::post('/students/fetch', 'fetch')->name('student.fetch');
+
+    Route::post('/upload', 'upload')->name('file.upload');
 
 });
 
@@ -110,3 +115,4 @@ Route::get('logout', function(){
     echo "logged out";
     // die;
 });
+

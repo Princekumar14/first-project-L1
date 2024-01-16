@@ -239,18 +239,34 @@ class StudentController extends Controller
             $exists = false;
 
             if (Cache::has("studentsName")) {
+                // Cache::forget('studentsName'); echo "hi";die;
                 $cachedData = Cache::get("studentsName");
+                // echo gettype($cachedData);die;
+                $matchCount = 0;
+                $foundData = null;
                 foreach ($cachedData as $data) {
                     if (str_contains(strtolower($data->name), strtolower($query))) {
-                        $exists = true;
-                        // echo "values from cache";
-                        $data = $cachedData;
-                        break;
+                        $foundData = $data;
+                        $matchCount++;
                     }
 
                 }
-                if (!$exists) {
-                    echo "hi<br>";
+                if ($foundData !== null) {  
+                    $exists = true;
+                    
+                }
+
+                    
+                if($exists)
+                {
+                    // echo "match count: " . $matchCount;
+                    // echo $matchCount;
+                    echo "from cache";
+                    // echo 
+                    $data = $cachedData;
+                }
+                else{
+                    // echo "hi<br>";
                     $data = DB::table('students')
                     ->select('name')
                     ->where('name', 'LIKE', "%{$query}%")
@@ -258,13 +274,36 @@ class StudentController extends Controller
 
                     if (sizeof($data) > 0) {
                         $combineData = $data->merge($cachedData);
-                        // echo "new data added to cache";
+                        echo "new data added to cache";
                         $data = $combineData;
                         Cache::put("studentsName", $data, now()->addMinutes(5)); //new data added to cache
                     }
                 }
 
+                // $dataFromDB = DB::table('students')
+                // ->select('name')
+                // ->where('name', 'LIKE', "%{$query}%")
+                // ->get();
+                // if($exists && sizeof($dataFromDB = DB::table('students')
+                // ->select('name')
+                // ->where('name', 'LIKE', "%{$query}%")
+                // ->get()) > $matchCount && $matchCount > 0)
+                // {
+                //     $oldData = $cachedData;
+                //     $filtered = $oldData->filter(function ($data) use ($query) {
+                //         return !str_contains(strtolower($data->name), $query);
 
+                //     });
+                //     // echo gettype($filtered);die;
+                //     // prx($filtered);
+
+                //     $combineData = $dataFromDB->merge($filtered);
+                //     echo "newly added";
+                //     $data = $combineData;
+                //     Cache::put("studentsName", $data, now()->addMinutes(5));
+                    
+                    
+                // }
             } else {
                 $data = DB::table('students')
                     ->select('name')
@@ -303,5 +342,15 @@ class StudentController extends Controller
 
             }
         }
+    }
+
+    public function upload(Request $request)
+    {
+        // echo $request->file('simage')->getPathName();
+        $fileName = time()."_".$request->file('simage')->getClientOriginalName();
+
+        echo $request->file('simage')->storeAs("/public/uploads", $fileName);  // left you at storage->app
+
+        prx($request->all());
     }
 }
