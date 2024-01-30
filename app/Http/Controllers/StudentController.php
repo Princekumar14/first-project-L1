@@ -51,6 +51,9 @@ class StudentController extends Controller
 
     public function addStudent(StudentRequest $req)
     {
+        echo "hi";
+        pr($req->all()) ;
+        die;
         // $req->validate([
         //     'sname' => 'required',
         //     'sage' => 'required|numeric|min:18',

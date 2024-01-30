@@ -1,8 +1,12 @@
 <?php
 
+use App\CustomFacade\DateClass;
 use App\Http\Controllers\CookiesController;
+use App\Http\Controllers\CustomController;
+use App\Http\Controllers\RequirementController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
 
@@ -35,6 +39,8 @@ Route::middleware(['super-gaurd'])->group(function(){
 Route::get('/upload', function () {
     return view('upload');
 });
+
+
 Route::get('/students', [StudentController::class, 'showStudents'])->name('allstudents')->middleware('gaurd');
 // Route::get('/students', [StudentController::class, 'showStudents'])->name('allstudents')->middleware('super-gaurd');
 Route::controller(StudentController::class)->group(function(){
@@ -116,3 +122,40 @@ Route::get('logout', function(){
     // die;
 });
 
+
+Route::controller(CustomController::class)->group(function(){
+    Route::get('/doCustomThing', 'doCustomThing');
+    
+    Route::get('/facade-test-controller', 'dateFormatChanger');
+
+
+});
+Route::get('/facade-test', function(){
+    $getDate = DateClass::dateFormatYMD('01/20/2024');
+    return "Date Format Changer by Custom facade through Route : ".$getDate;
+});
+
+
+
+
+
+
+
+// Route::post('/addingRequirement', [RequirementController::class, 'addRequirement'])->middleware('hors');
+// Route::controller(RequirementController::class)->group(function(){
+//     Route::POST('/addingRequirement', 'addRequirement')->name('addRequirement');
+//     // Route::post('/addingRequirement', 'addRequirement')->middleware('cors');
+
+//     Route::get('/justcheck', 'justcheck');
+// });
+
+
+
+Route::get('/takecsrf',[RequirementController::class,'takecsrf']);
+// Route::get('/takecsrf2',[RequirementController::class,'takecsrf'])->middleware('mycor');
+
+Route::middleware(['mycor'])->group(function () {
+    Route::post('/addingdata',[RequirementController::class,'addRequirement']);
+    // Routes requiring CORS
+    Route::get('/takecsrf2',[RequirementController::class,'takecsrf']);
+});

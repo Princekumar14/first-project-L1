@@ -31,6 +31,7 @@
                         <th scope="col">Age</th>
                         <th scope="col">Email</th>
                         <th scope="col">Address</th>
+                        <th scope="col">Admission Date</th>
                         <th scope="col">View</th>
                         <th scope="col">Delete</th>
                         <th scope="col">Update</th>
@@ -44,6 +45,7 @@
                                 <td>{{ $student->age }}</td>
                                 <td>{{ $student->email }}</td>
                                 <td>{{ $student->address }}</td>
+                                <td>{{ get_formatted_date($student->created_at,  'd-M-Y') }}</td>
                                 <td><a class="btn btn-primary btn-sm" href="{{ route('view.student', $student->id) }}">View</a></td>
                                 <td><a class="btn btn-danger btn-sm" href="{{ route('delete.student', $student->id) }}">Delete</a></td>
                                 <td><a class="btn btn-warning btn-sm" href="{{ route('update.page', $student->id) }}">Update</a></td>
